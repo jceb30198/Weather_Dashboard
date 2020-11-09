@@ -21,7 +21,7 @@
                 <div class="input-group mb-3">
                     <input class="form-control" placeholder="City Name">
                     <div class="input-group-append">
-                        <button class="btn btn-primary fa fa-search" type="button" id="search-button"></button>
+                        <button class="btn btn-primary fa fa-search" type="button" id="search"></button>
                     </div>
                 </div>
 
@@ -31,22 +31,27 @@
             <section class="col-8">
                 <div class="row border border-dark">
                     <div class="col-12">
-                        <span id="city-name"></span>
+                        <span id="city"></span>
                         <img id="pic" src="" alt="">
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <p></p>
+                            <p id="temp"></p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <p></p>
+                            <p id="humid"></p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <p></p>
+                            <p id="wind"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <p id="uv"></p>
                         </div>
                     </div>
                 </div>
@@ -56,16 +61,16 @@
                 </div>
 
                 <div class="row">
-                    <div class="col bg-primary text-white"></div>
-                    <div class="col bg-primary text-white"></div>
-                    <div class="col bg-primary text-white"></div>
-                    <div class="col bg-primary text-white"></div>
-                    <div class="col bg-primary text-white"></div>
+                    <div class="col bg-primary text-white day-forecast"></div>
+                    <div class="col bg-primary text-white day-forecast"></div>
+                    <div class="col bg-primary text-white day-forecast"></div>
+                    <div class="col bg-primary text-white day-forecast"></div>
+                    <div class="col bg-primary text-white day-forecast"></div>
                 </div>
             </section>
         </div>
     </div>
-    <script src="script.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
 </body>
 </html>
