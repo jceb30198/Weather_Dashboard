@@ -1,7 +1,6 @@
 $(document).ready(function() {
     // DOM Variables
     const searchForm = $('#search-form');
-    const searchVal = $('#search-city').val();
     const searchBtn = $('#search-btn');
     const cityList = $('#city-list');
     const currentCity = $('#current-city');
@@ -10,13 +9,14 @@ $(document).ready(function() {
     const windSpeed = $('#wind-speed');
     const uvIndex = $('#uv-index');
     const forecast5Day = $('#forecast-5-day');
-
+    
     
     // Form Submit Event
     searchForm.submit(function(e) {
         // AJAX Call with City Submitted
+        const searchVal = $('#search-city').val();
         cityGet(searchVal);
-
+        console.log(searchVal);
         
         e.preventDefault();
     })
