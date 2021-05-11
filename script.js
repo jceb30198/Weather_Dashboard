@@ -1,7 +1,7 @@
 $(document).ready(function() {
     // DOM Variables
     const searchForm = $('#search-form');
-    const searchCity = $('#search-city');
+    const searchVal = $('#search-city').val();
     const searchBtn = $('#search-btn');
     const cityList = $('#city-list');
     const currentCity = $('#current-city');
@@ -14,7 +14,10 @@ $(document).ready(function() {
     
     // Form Submit Event
     searchForm.submit(function(e) {
-        cityGet(searchCity.val());
+        // AJAX Call with City Submitted
+        cityGet(searchVal);
+
+        
         e.preventDefault();
     })
     
