@@ -4,12 +4,12 @@ $(document).ready(function() {
     const searchBtn = $('#search-btn');
     const cityList = $('#city-list');
     const currentCity = $('#current-city');
+    const weatherImg = $('#weather-img');
     const temperature = $('#temperature');
     const feelsLike = $('#feels-like');
     const humidity = $('#humidity');
     const windSpeed = $('#wind-speed');
     const forecast5Day = $('#forecast-5-day');
-    
     
     // Form Submit Event
     searchForm.submit(function(e) {
@@ -20,10 +20,10 @@ $(document).ready(function() {
 
         // City List and Local Storage
         storeCity(searchVal);
+
         e.preventDefault();
     })
     
-    console.log(new Date().getMonth());
     function cityGet(cityName) {
         // Current Weather
         const currentURL =`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&appid=2054ebe0ce6d092ec2b8b6b1368ceeb0`;
@@ -35,6 +35,40 @@ $(document).ready(function() {
             const month = currentDate.getMonth() + 1;
             const day = currentDate.getDate();
             const year = currentDate.getFullYear();
+            
+            console.log();
+            switch(res.weather[0].main) {
+                case 'Clear': 
+                    weatherImg.attr('src', 'http://openweathermap.org/img/wn/01d.png');
+                    weatherImg.attr('style', 'height: 60px; width: 60px');
+                    weatherImg.addClass('bg-secondary');
+                    break;
+                case 'Rain':
+                    weatherImg.attr('src', 'http://openweathermap.org/img/wn/10d.png');
+                    weatherImg.attr('style', 'height: 60px; width: 60px');
+                    weatherImg.addClass('bg-secondary');
+                    break;
+                case 'Drizzle':
+                    weatherImg.attr('src', 'http://openweathermap.org/img/wn/09d.png');
+                    weatherImg.attr('style', 'height: 60px; width: 60px');
+                    weatherImg.addClass('bg-secondary');
+                    break;
+                case 'Snow':
+                    weatherImg.attr('src', 'http://openweathermap.org/img/wn/13d.png');
+                    weatherImg.attr('style', 'height: 60px; width: 60px');
+                    weatherImg.addClass('bg-secondary');
+                    break;
+                case 'Thunderstorm':
+                    weatherImg.attr('src', 'http://openweathermap.org/img/wn/11d.png');
+                    weatherImg.attr('style', 'height: 60px; width: 60px');
+                    weatherImg.addClass('bg-secondary');
+                    break;
+                case 'Clouds':
+                    weatherImg.attr('src', 'http://openweathermap.org/img/wn/02d.png');
+                    weatherImg.attr('style', 'height: 60px; width: 60px');
+                    weatherImg.addClass('bg-secondary');
+                    break;
+            }
 
             currentCity.text(`${res.name} (${month}/${day}/${year})`);
             temperature.text(`Temperature: ${res.main.temp}°F`);
