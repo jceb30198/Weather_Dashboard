@@ -32,45 +32,43 @@ $(document).ready(function() {
             method: 'GET'
         }).then(function(res) {
             const currentDate = new Date();
-            const month = currentDate.getMonth() + 1;
-            const day = currentDate.getDate();
-            const year = currentDate.getFullYear();
-            
-            console.log();
+        
+            // Switch Case for Weather Image
             switch(res.weather[0].main) {
                 case 'Clear': 
                     weatherImg.attr('src', 'http://openweathermap.org/img/wn/01d.png');
                     weatherImg.attr('style', 'height: 60px; width: 60px');
-                    weatherImg.addClass('bg-secondary');
+                    weatherImg.addClass('bg-primary');
                     break;
                 case 'Rain':
                     weatherImg.attr('src', 'http://openweathermap.org/img/wn/10d.png');
                     weatherImg.attr('style', 'height: 60px; width: 60px');
-                    weatherImg.addClass('bg-secondary');
+                    weatherImg.addClass('bg-primary');
                     break;
                 case 'Drizzle':
                     weatherImg.attr('src', 'http://openweathermap.org/img/wn/09d.png');
                     weatherImg.attr('style', 'height: 60px; width: 60px');
-                    weatherImg.addClass('bg-secondary');
+                    weatherImg.addClass('bg-primary');
                     break;
                 case 'Snow':
                     weatherImg.attr('src', 'http://openweathermap.org/img/wn/13d.png');
                     weatherImg.attr('style', 'height: 60px; width: 60px');
-                    weatherImg.addClass('bg-secondary');
+                    weatherImg.addClass('bg-primary');
                     break;
                 case 'Thunderstorm':
                     weatherImg.attr('src', 'http://openweathermap.org/img/wn/11d.png');
                     weatherImg.attr('style', 'height: 60px; width: 60px');
-                    weatherImg.addClass('bg-secondary');
+                    weatherImg.addClass('bg-primary');
                     break;
                 case 'Clouds':
                     weatherImg.attr('src', 'http://openweathermap.org/img/wn/02d.png');
                     weatherImg.attr('style', 'height: 60px; width: 60px');
-                    weatherImg.addClass('bg-secondary');
+                    weatherImg.addClass('bg-primary');
                     break;
             }
 
-            currentCity.text(`${res.name} (${month}/${day}/${year})`);
+            // Displaying Data
+            currentCity.text(`${res.name} (${formatDate(currentDate)})`);
             temperature.text(`Temperature: ${res.main.temp}°F`);
             feelsLike.text(`Feels Like: ${res.main.feels_like}°F`);
             humidity.text(`Humidity: ${res.main.humidity}%`);
@@ -78,17 +76,25 @@ $(document).ready(function() {
         })
 
         // 5 Day Forecast
-        // const queryURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=2054ebe0ce6d092ec2b8b6b1368ceeb0`;
-        // $.ajax({
-        //     url: queryURL,
-        //     method: 'GET'
-        // }).then(function(res) {
-        //     const list = res.list;
-        //     console.log(res);
-        //     //currentCity.text(`${res.city.name} (${res.list[0].dt_txt})`)
-        // })
-    }
+        const queryURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=2054ebe0ce6d092ec2b8b6b1368ceeb0`;
+        $.ajax({
+            url: queryURL,
+            method: 'GET'
+        }).then(function(res) {
+            const list = res.list;
+            for(let i = 0; i < list.length; i += 8) {
+                const currentDate = new Date(list[i].dt_txt);
+                
+                const divEl = $('<div class="card text-white bg-primary mx-auto mb-10 p-2" style="width: 135px; height: 175px;">');
+                const divHead = $('<h5>').text(formatDate(currentDate));
 
+                divEl.append(divHead);
+                forecast5Day.append(divEl);
+                console.log();
+            }
+        })
+    }
+    
     // Local Storage and List Array
     function storeCity(cityName) {
         const liEl = $('<li class="list-group-item btn">');
@@ -96,3 +102,12 @@ $(document).ready(function() {
         cityList.prepend(liEl);
     }
 });
+
+// Formats the Date Inputted
+function formatDate(date) {
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    
+    return `${month}/${day}/${year}`;
+  }
