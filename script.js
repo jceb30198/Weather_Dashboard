@@ -8,7 +8,9 @@ $(document).ready(function () {
     const humidity = $('#humidity');
     const windSpeed = $('#wind-speed');
     const forecast5Day = $('#forecast-5-day');
+    const clearBtn = $('#clear-btn');
 
+    // Load All Previous History
     loadPage();
 
     // Form Submit Event
@@ -36,6 +38,12 @@ $(document).ready(function () {
         cityGet(e.target.textContent);
         console.log(e.target.textContent);
         e.preventDefault();
+    })
+
+    // Clears Storage and City List
+    clearBtn.click(function(e) {
+        localStorage.clear();
+        cityList.empty();
     })
 
     function cityGet(cityName) {
