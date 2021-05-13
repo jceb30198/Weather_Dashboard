@@ -1,18 +1,17 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // DOM Variables
     const searchForm = $('#search-form');
     const searchBtn = $('#search-btn');
     const cityList = $('#city-list');
     const currentCity = $('#current-city');
-    const weatherImg = $('#weather-img');
     const temperature = $('#temperature');
     const feelsLike = $('#feels-like');
     const humidity = $('#humidity');
     const windSpeed = $('#wind-speed');
     const forecast5Day = $('#forecast-5-day');
-    
+
     // Form Submit Event
-    searchForm.submit(function(e) {
+    searchForm.submit(function (e) {
         // AJAX Call with City Submitted
         const searchVal = $('#search-city').val();
         cityGet(searchVal);
@@ -23,19 +22,20 @@ $(document).ready(function() {
 
         e.preventDefault();
     })
-    
+
     function cityGet(cityName) {
         // Current Weather
-        const currentURL =`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&appid=2054ebe0ce6d092ec2b8b6b1368ceeb0`;
+        const currentURL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&appid=2054ebe0ce6d092ec2b8b6b1368ceeb0`;
         $.ajax({
             url: currentURL,
             method: 'GET'
-        }).then(function(res) {
+        }).then(function (res) {
             const currentDate = new Date();
-        
+            const weatherImg = $('#weather-img');
+
             // Switch Case for Weather Image
-            switch(res.weather[0].main) {
-                case 'Clear': 
+            switch (res.weather[0].main) {
+                case 'Clear':
                     weatherImg.attr('src', 'http://openweathermap.org/img/wn/01d.png');
                     weatherImg.attr('style', 'height: 60px; width: 60px');
                     weatherImg.addClass('bg-primary');
@@ -76,25 +76,69 @@ $(document).ready(function() {
         })
 
         // 5 Day Forecast
-        const queryURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=2054ebe0ce6d092ec2b8b6b1368ceeb0`;
+        const queryURL = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=imperial&appid=2054ebe0ce6d092ec2b8b6b1368ceeb0`;
         $.ajax({
             url: queryURL,
             method: 'GET'
-        }).then(function(res) {
+        }).then(function (res) {
             const list = res.list;
-            for(let i = 0; i < list.length; i += 8) {
+            for (let i = 0; i < list.length; i += 8) {
                 const currentDate = new Date(list[i].dt_txt);
-                
+
+                // Elements for DIV Forecasts
                 const divEl = $('<div class="card text-white bg-primary mx-auto mb-10 p-2" style="width: 135px; height: 175px;">');
                 const divHead = $('<h5>').text(formatDate(currentDate));
+                const divImg = $('<img>');
+                const divTemp = $('<div>').text(`Temp: ${list[i].main.temp}°F`);
+                const divHumidity = $('<div>').text(`Humidity: ${list[i].main.humidity}%`);
 
+                // Images for DIV
+                switch (list[i].weather[0].main) {
+                    case 'Clear':
+                        divImg.attr('src', 'http://openweathermap.org/img/wn/01d.png');
+                        divImg.attr('style', 'height: 60px; width: 60px');
+                        break;
+                    case 'Rain':
+                        divImg.attr('src', 'http://openweathermap.org/img/wn/10d.png');
+                        divImg.attr('style', 'height: 60px; width: 60px');
+                        break;
+                    case 'Drizzle':
+                        divImg.attr('src', 'http://openweathermap.org/img/wn/09d.png');
+                        divImg.attr('style', 'height: 60px; width: 60px');
+                        break;
+                    case 'Snow':
+                        divImg.attr('src', 'http://openweathermap.org/img/wn/13d.png');
+                        divImg.attr('style', 'height: 60px; width: 60px');
+                        break;
+                    case 'Thunderstorm':
+                        divImg.attr('src', 'http://openweathermap.org/img/wn/11d.png');
+                        divImg.attr('style', 'height: 60px; width: 60px');
+                        break;
+                    case 'Clouds':
+                        divImg.attr('src', 'http://openweathermap.org/img/wn/02d.png');
+                        divImg.attr('style', 'height: 60px; width: 60px');
+                        break;
+                }
+
+                // Appending the items to the div and then appending the div to the 5Day forecast ID
                 divEl.append(divHead);
+                divEl.append(divImg);
+                divEl.append(divTemp);
+                divEl.append(divHumidity);
                 forecast5Day.append(divEl);
-                console.log();
             }
         })
     }
     
+    // Formats the Date Inputted
+    function formatDate(date) {
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const year = date.getFullYear();
+    
+        return `${month}/${day}/${year}`;
+    };
+
     // Local Storage and List Array
     function storeCity(cityName) {
         const liEl = $('<li class="list-group-item btn">');
@@ -103,11 +147,3 @@ $(document).ready(function() {
     }
 });
 
-// Formats the Date Inputted
-function formatDate(date) {
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear();
-    
-    return `${month}/${day}/${year}`;
-  }
