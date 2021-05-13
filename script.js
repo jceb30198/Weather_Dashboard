@@ -1,7 +1,6 @@
 $(document).ready(function () {
     // DOM Variables
     const searchForm = $('#search-form');
-    const searchBtn = $('#search-btn');
     const cityList = $('#city-list');
     const currentCity = $('#current-city');
     const temperature = $('#temperature');
@@ -10,16 +9,32 @@ $(document).ready(function () {
     const windSpeed = $('#wind-speed');
     const forecast5Day = $('#forecast-5-day');
 
+    loadPage();
+
     // Form Submit Event
-    searchForm.submit(function (e) {
-        // AJAX Call with City Submitted
+    searchForm.submit(function(e) {
+        // AJAX Call with City Submitted and added to the list
+        const liEl = $('<li class="list-group-item btn">');
         const searchVal = $('#search-city').val();
+
+        // List Append
+        liEl.text(searchVal);
+        cityList.prepend(liEl);
+        
+        // Display Function
         cityGet(searchVal);
         console.log(searchVal);
 
         // City List and Local Storage
         storeCity(searchVal);
 
+        e.preventDefault();
+    })
+
+    // List Item Click Event
+    cityList.click(function(e) {
+        cityGet(e.target.textContent);
+        console.log(e.target.textContent);
         e.preventDefault();
     })
 
@@ -82,6 +97,9 @@ $(document).ready(function () {
             method: 'GET'
         }).then(function (res) {
             const list = res.list;
+            // Clears the forecast display
+            forecast5Day.empty();
+
             for (let i = 0; i < list.length; i += 8) {
                 const currentDate = new Date(list[i].dt_txt);
 
@@ -141,9 +159,38 @@ $(document).ready(function () {
 
     // Local Storage and List Array
     function storeCity(cityName) {
-        const liEl = $('<li class="list-group-item btn">');
-        liEl.text(cityName);
-        cityList.prepend(liEl);
+        let cityStore;
+
+        // Check if Array exists
+        if(localStorage.getItem('cities') === null) {
+            cityStore = [];
+        } else{
+            cityStore = JSON.parse(localStorage.getItem('cities', cityStore));
+        }
+
+        // Push city data
+        cityStore.push(cityName);
+
+        // Push to localstorage
+        localStorage.setItem('cities', JSON.stringify(cityStore));
+    }
+
+    // Loads page with all the previously searched cities
+    function loadPage() {
+        let cityStore;
+        if(localStorage.getItem('cities') === null) {
+            cityStore = [];
+        }
+        else {
+            cityStore = JSON.parse(localStorage.getItem('cities'));
+        }
+
+        cityStore.forEach(function(cityName) {
+            const liEl = $('<li class="list-group-item btn">');
+            // List Append
+            liEl.text(cityName);
+            cityList.prepend(liEl);
+        });
     }
 });
 
